@@ -6,3 +6,12 @@ install:
   - pip install -r requirements.txt
 script:
   - python bodyMeasurements.py
+deploy:
+  provider: pages
+  github_token: $GITHUB_TOKEN
+  skip_cleanup: true
+  keep_history: true
+  on:
+    branch: master
+  target_branch: master
+  
