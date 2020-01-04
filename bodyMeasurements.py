@@ -1,6 +1,7 @@
 import gspread
 import numpy as np
 from datetime import timedelta, datetime
+import time
 from oauth2client.service_account import ServiceAccountCredentials
 import matplotlib.pyplot as plt  # For plotting
 import matplotlib.dates as mdates
@@ -154,3 +155,5 @@ lbs.set_title('Body Measurements', fontsize=20)
 
 fig.autofmt_xdate()
 fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
+
+time.sleep(300)
