@@ -1,3 +1,4 @@
+if: commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
 language: python
 python:
   - "3.6.4"
@@ -14,4 +15,3 @@ deploy:
   on:
     branch: master
   target_branch: master
-  
