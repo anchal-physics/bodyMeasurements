@@ -156,4 +156,4 @@ lbs.set_title('Body Measurements', fontsize=20)
 fig.autofmt_xdate()
 fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
 
-time.sleep(12*60*60)
+time.sleep(6*60)
