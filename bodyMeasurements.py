@@ -22,7 +22,7 @@ scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                                        'BodyMeasurements-2685fd4ece78.json',
+                                        'BodyMeasurements-74d397ae9641.json',
                                         scope)
 
 def grabInputArgs():
@@ -203,27 +203,5 @@ def bodyMeasurements(credentials):
     fig.autofmt_xdate()
     fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
 
-if __name__ == "__main__": #triger input parser on call
-    '''
-    args = grabInputArgs()
-    private_key = args.private_key.replace('SPACE', ' ')
-    private_key = args.private_key.replace('NEWLINE', '\n')
-    private_key = args.private_key.replace('SLASH', '/')
-    print(private_key)
-    keyfile_dict = {
-        "type": args.type,
-        "project_id": args.project_id,
-        "private_key_id": args.private_key_id,
-        "private_key": private_key,
-        "client_email": args.client_email,
-        "client_id": args.client_id,
-        "auth_uri": args.auth_uri,
-        "token_uri": args.token_uri,
-        "auth_provider_x509_cert_url": args.auth_provider_x509_cert_url,
-        "client_x509_cert_url": args.client_x509_cert_url
-    }
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-                                                                   keyfile_dict,
-                                                                   scopes=scope)
-    '''
+if __name__ == "__main__":
     bodyMeasurements(credentials)
