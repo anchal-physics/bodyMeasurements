@@ -17,5 +17,5 @@ deploy:
   target_branch: master
 before_install:
 - openssl aes-256-cbc -K $encrypted_485e24aa73cb_key -iv $encrypted_485e24aa73cb_iv
-  -in BodyMeasurements-2685fd4ece78.json.enc -out BodyMeasurements-2685fd4ece78.json
+  -in BodyMeasurements-74d397ae9641.json.enc -out BodyMeasurements-74d397ae9641.json
   -d
