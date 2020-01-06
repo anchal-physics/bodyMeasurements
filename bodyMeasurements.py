@@ -206,11 +206,13 @@ def bodyMeasurements(credentials):
 
 if __name__ == "__main__": #triger input parser on call
     args = grabInputArgs()
+    private_key = args.private_key.replace('SPACE', ' ')
+    print(private_key)
     keyfile_dict = {
         "type": args.type,
         "project_id": args.project_id,
         "private_key_id": args.private_key_id,
-        "private_key": args.private_key,
+        "private_key": private_key,
         "client_email": args.client_email,
         "client_id": args.client_id,
         "auth_uri": args.auth_uri,
