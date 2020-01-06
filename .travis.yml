@@ -6,11 +6,7 @@ cache: pip
 install:
 - pip install -r requirements.txt
 script:
-- python bodyMeasurements.py
-#- python bodyMeasurements.py --type $type --project_id $project_id --private_key_id
-#  $private_key_id --private_key $private_key,  --client_email $client_email,  --client_id
-#  $client_id,  --auth_uri $auth_uri,  --token_uri $token_uri,  --auth_provider_x509_cert_url
-#  $auth_provider_x509_cert_url,  --client_x509_cert_url $client_x509_cert_url
+- python bodyMeasurements.py --type $type --project_id $project_id --private_key_id $private_key_id --private_key $private_key  --client_email $client_email --client_id $client_id --auth_uri $auth_uri --token_uri $token_uri --auth_provider_x509_cert_url $auth_provider_x509_cert_url --client_x509_cert_url $client_x509_cert_url
 deploy:
   provider: pages
   github_token: "$GITHUB_TOKEN"
@@ -19,7 +15,7 @@ deploy:
   on:
     branch: master
   target_branch: master
-before_install:
-- openssl aes-256-cbc -K $encrypted_a19a2544770a_key -iv $encrypted_a19a2544770a_iv
-  -in BodyMeasurements-2685fd4ece78.json.enc -out BodyMeasurements-2685fd4ece78.json
-  -d
+#before_install:
+#- openssl aes-256-cbc -K $encrypted_a19a2544770a_key -iv $encrypted_a19a2544770a_iv
+#  -in BodyMeasurements-2685fd4ece78.json.enc -out BodyMeasurements-2685fd4ece78.json
+#  -d
