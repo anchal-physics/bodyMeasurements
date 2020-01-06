@@ -208,6 +208,7 @@ if __name__ == "__main__": #triger input parser on call
     args = grabInputArgs()
     private_key = args.private_key.replace('SPACE', ' ')
     private_key = args.private_key.replace('NEWLINE', '\n')
+    private_key = args.private_key.replace('SLASH', '/')
     print(private_key)
     keyfile_dict = {
         "type": args.type,
