@@ -20,11 +20,11 @@ pylab.rcParams.update(params)
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-'''
+
 credentials = ServiceAccountCredentials.from_json_keyfile_name(
                                         'BodyMeasurements-2685fd4ece78.json',
                                         scope)
-'''
+
 
 def grabInputArgs():
     parser = argparse.ArgumentParser(
@@ -205,6 +205,7 @@ def bodyMeasurements(credentials):
     fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
 
 if __name__ == "__main__": #triger input parser on call
+    '''
     args = grabInputArgs()
     keyfile_dict = {
         "type": args.type,
@@ -221,4 +222,5 @@ if __name__ == "__main__": #triger input parser on call
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
                                                                    keyfile_dict,
                                                                    scopes=scope)
+                                                                   '''
     bodyMeasurements(credentials)
