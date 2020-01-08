@@ -1,4 +1,4 @@
-if: commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
+#if: commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
 language: python
 python:
 - 3.6.4
@@ -12,6 +12,7 @@ deploy:
   github_token: "$GITHUB_TOKEN"
   skip_cleanup: true
   keep_history: true
+  commit_message: "[skip travis-ci] Automatic travis deployment"
   on:
     branch: master
   target_branch: master
