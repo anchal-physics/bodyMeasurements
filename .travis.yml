@@ -1,4 +1,3 @@
-#if: commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
 language: python
 python:
 - 3.6.4
@@ -12,10 +11,9 @@ deploy:
   github_token: "$GITHUB_TOKEN"
   skip_cleanup: true
   keep_history: true
-  travis_commit_message: "[skip travis-ci] Automatic travis deployment"
   on:
     branch: master
-  target_branch: master
+  target_branch: gh-pages
 before_install:
 - openssl aes-256-cbc -K $encrypted_485e24aa73cb_key -iv $encrypted_485e24aa73cb_iv
   -in BodyMeasurements-74d397ae9641.json.enc -out BodyMeasurements-74d397ae9641.json
