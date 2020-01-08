@@ -12,7 +12,7 @@ deploy:
   github_token: "$GITHUB_TOKEN"
   skip_cleanup: true
   keep_history: true
-  commit_message: "[skip travis-ci] Automatic travis deployment"
+  travis_commit_message: "[skip travis-ci] Automatic travis deployment"
   on:
     branch: master
   target_branch: master
