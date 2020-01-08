@@ -1,4 +1,4 @@
-if commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
+if: commit_message != "Deploy anchal-physics/bodyMeasurements to github.com/anchal-physics/bodyMeasurements.git:master"
 language: python
 python:
 - 3.6.4
