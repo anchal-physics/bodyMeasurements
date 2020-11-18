@@ -22,7 +22,7 @@ scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                                        'BodyMeasurements-74d397ae9641.json',
+                                        'bodymeasurements-d291f81a84a8.json',
                                         scope)
 
 def grabInputArgs():
