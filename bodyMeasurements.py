@@ -145,7 +145,6 @@ def bodyMeasurements(credentials):
     perc.grid(which='both')
     perc.grid(axis='y', color='orange')
 
-    lbs.xaxis.set_ticks(tt)
     lbs.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
 
     ybox1 = TextArea("Muscle",
