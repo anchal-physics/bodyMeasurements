@@ -6,7 +6,7 @@ from datetime import timedelta, datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import matplotlib.pyplot as plt  # For plotting
 import matplotlib.dates as mdates
-from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, HPacker, VPacker
+from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, VPacker
 # *****************************************************************************
 # Setting RC Parameters for figure size and fontsizes
 import matplotlib.pylab as pylab
@@ -25,6 +25,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(
                                         'bodymeasurements-d291f81a84a8.json',
                                         scope)
 
+
 def grabInputArgs():
     parser = argparse.ArgumentParser(
         description='')
@@ -40,16 +41,18 @@ def grabInputArgs():
     parser.add_argument('--client_x509_cert_url')
     return parser.parse_args()
 
+
 def parse(data, ii, ind):
     if data[ii][ind] == '':
         return np.NaN
     else:
         return float(data[ii][ind])
 
+
 def removeNan(tt, mWater, sWater):
-    ii=0
+    ii = 0
     ttWater = copy.deepcopy(tt)
-    while(ii<len(mWater)):
+    while(ii < len(mWater)):
         if np.isnan(mWater[ii]):
             mWater = np.delete(mWater, ii)
             sWater = np.delete(sWater, ii)
@@ -58,11 +61,13 @@ def removeNan(tt, mWater, sWater):
             ii = ii+1
     return ttWater, mWater, sWater
 
+
 def make_patch_spines_invisible(ax):
     ax.set_frame_on(True)
     ax.patch.set_visible(False)
     for sp in ax.spines.values():
         sp.set_visible(False)
+
 
 def bodyMeasurements(credentials):
     gc = gspread.authorize(credentials)
@@ -107,9 +112,11 @@ def bodyMeasurements(credentials):
         mFat[ii] = np.nanmean(fat[weekList[ii]:weekList[ii+1]])
         mMuscle[ii] = np.nanmean(muscle[weekList[ii]:weekList[ii+1]])
         sWeight[ii] = np.nanstd(weight[weekList[ii]:weekList[ii+1]])
-        sWater[ii] = np.nanmax([np.nanstd(water[weekList[ii]:weekList[ii+1]]), 1])
+        sWater[ii] = np.nanmax([np.nanstd(water[weekList[ii]:weekList[ii+1]]),
+                                1])
         sFat[ii] = np.nanmax([np.nanstd(fat[weekList[ii]:weekList[ii+1]]), 1])
-        sMuscle[ii] = np.nanmax([np.nanstd(muscle[weekList[ii]:weekList[ii+1]]), 1])
+        sMuscle[ii] = np.nanmax([
+                            np.nanstd(muscle[weekList[ii]:weekList[ii+1]]), 1])
 
     mWeight[-1] = np.nanmean(weight[weekList[-1]:])
     mWater[-1] = np.nanmean(water[weekList[-1]:])
@@ -124,7 +131,7 @@ def bodyMeasurements(credentials):
     ttFat, mFat, sFat = removeNan(tt, mFat, sFat)
     ttMuscle, mMuscle, sMuscle = removeNan(tt, mMuscle, sMuscle)
 
-    fig, lbs = plt.subplots(figsize=[16,12])
+    fig, lbs = plt.subplots(figsize=[16, 12])
     fig.subplots_adjust(right=0.75)
     perc = lbs.twinx()
     make_patch_spines_invisible(perc)
@@ -133,12 +140,16 @@ def bodyMeasurements(credentials):
     we, = lbs.plot(tt, mWeight, "m-", lw=1.5, marker='*', label="Weight")
     fa, = perc.plot(ttFat, mFat, "y-", lw=1.5, marker='D', label="Fat %")
     wa, = perc.plot(ttWater, mWater, "b-", lw=1.5, marker='o', label="Water %")
-    mu, = lbs.plot(ttMuscle, mMuscle, "r-", lw=1.5, marker='s', label="Muscle Mass")
+    mu, = lbs.plot(ttMuscle, mMuscle, "r-", lw=1.5, marker='s',
+                   label="Muscle Mass")
 
-    lbs.fill_between(tt, mWeight - sWeight, mWeight + sWeight, color='m', alpha=0.2)
+    lbs.fill_between(tt, mWeight - sWeight, mWeight + sWeight, color='m',
+                     alpha=0.2)
     perc.fill_between(ttFat, mFat - sFat, mFat + sFat, color='y', alpha=0.2)
-    perc.fill_between(ttWater, mWater - sWater, mWater + sWater, color='b', alpha=0.2)
-    lbs.fill_between(ttMuscle, mMuscle - sMuscle, mMuscle + sMuscle, color='r', alpha=0.2)
+    perc.fill_between(ttWater, mWater - sWater, mWater + sWater, color='b',
+                      alpha=0.2)
+    lbs.fill_between(ttMuscle, mMuscle - sMuscle, mMuscle + sMuscle, color='r',
+                     alpha=0.2)
 
     lbs.grid(which='both')
     lbs.grid(axis='y', color='c')
@@ -168,8 +179,8 @@ def bodyMeasurements(credentials):
     ybox = VPacker(children=[ybox6, ybox5, ybox4, ybox1, ybox2, ybox3],
                    align="bottom", pad=0, sep=5)
     lbs_ybox = AnchoredOffsetbox(loc=8, child=ybox, pad=0., frameon=False,
-                                      bbox_to_anchor=(-0.08, 0.4),
-                                      bbox_transform=lbs.transAxes, borderpad=0.)
+                                 bbox_to_anchor=(-0.08, 0.4),
+                                 bbox_transform=lbs.transAxes, borderpad=0.)
     lbs.add_artist(lbs_ybox)
 
     ybox1 = TextArea("Water",
@@ -193,14 +204,15 @@ def bodyMeasurements(credentials):
     ybox = VPacker(children=[ybox6, ybox5, ybox4, ybox1, ybox2, ybox3],
                    align="bottom", pad=0, sep=5)
     perc_ybox = AnchoredOffsetbox(loc=8, child=ybox, pad=0., frameon=False,
-                                      bbox_to_anchor=(1.08, 0.4),
-                                      bbox_transform=lbs.transAxes, borderpad=0.)
+                                  bbox_to_anchor=(1.08, 0.4),
+                                  bbox_transform=lbs.transAxes, borderpad=0.)
     perc.add_artist(perc_ybox)
 
     lbs.set_title('Body Measurements', fontsize=20)
 
     fig.autofmt_xdate()
     fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
+
 
 if __name__ == "__main__":
     bodyMeasurements(credentials)
