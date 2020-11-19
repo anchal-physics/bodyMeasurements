@@ -80,11 +80,13 @@ def bodyMeasurements(credentials):
     water = np.zeros(noEntries)
     fat = np.zeros(noEntries)
     muscle = np.zeros(noEntries)
+    musPer = np.zeros(noEntries)
     for ii in range(noEntries):
         weight[ii] = parse(data, ii, 1)
         water[ii] = parse(data, ii, 2)
         fat[ii] = parse(data, ii, 3)
         muscle[ii] = parse(data, ii, 4)
+        musPer[ii] = muscle[ii] * 100 / weight[ii]
     for ii in range(noEntries):
         ts[ii] = datetime.strptime(ts[ii], '%m/%d/%Y %H:%M:%S')
     weekList = [0]
@@ -102,34 +104,44 @@ def bodyMeasurements(credentials):
     mWater = np.zeros(noWeeks)
     mFat = np.zeros(noWeeks)
     mMuscle = np.zeros(noWeeks)
+    mMusPer = np.zeros(noWeeks)
     sWeight = np.zeros(noWeeks)
     sWater = np.zeros(noWeeks)
     sFat = np.zeros(noWeeks)
     sMuscle = np.zeros(noWeeks)
+    sMusPer = np.zeros(noWeeks)
     for ii in range(len(weekList)-1):
         mWeight[ii] = np.nanmean(weight[weekList[ii]:weekList[ii+1]])
         mWater[ii] = np.nanmean(water[weekList[ii]:weekList[ii+1]])
         mFat[ii] = np.nanmean(fat[weekList[ii]:weekList[ii+1]])
         mMuscle[ii] = np.nanmean(muscle[weekList[ii]:weekList[ii+1]])
+        mMusPer[ii] = np.nanmean(musPer[weekList[ii]:weekList[ii+1]])
         sWeight[ii] = np.nanstd(weight[weekList[ii]:weekList[ii+1]])
         sWater[ii] = np.nanmax([np.nanstd(water[weekList[ii]:weekList[ii+1]]),
                                 1])
         sFat[ii] = np.nanmax([np.nanstd(fat[weekList[ii]:weekList[ii+1]]), 1])
         sMuscle[ii] = np.nanmax([
                             np.nanstd(muscle[weekList[ii]:weekList[ii+1]]), 1])
+        sMusPer[ii] = np.nanmax([
+                            np.nanstd(musPer[weekList[ii]:weekList[ii+1]]), 1])
+
+
 
     mWeight[-1] = np.nanmean(weight[weekList[-1]:])
     mWater[-1] = np.nanmean(water[weekList[-1]:])
     mFat[-1] = np.nanmean(fat[weekList[-1]:])
     mMuscle[-1] = np.nanmean(muscle[weekList[-1]:])
+    mMusPer[-1] = np.nanmean(musPer[weekList[-1]:])
     sWeight[-1] = np.nanstd(weight[weekList[-1]:])
     sWater[-1] = np.nanmax([np.nanstd(water[weekList[-1]:]), 1])
     sFat[-1] = np.nanmax([np.nanstd(fat[weekList[-1]:]), 1])
     sMuscle[-1] = np.nanmax([np.nanstd(muscle[weekList[-1]:]), 1])
+    sMusPer[-1] = np.nanmax([np.nanstd(musPer[weekList[-1]:]), 1])
 
     ttWater, mWater, sWater = removeNan(tt, mWater, sWater)
     ttFat, mFat, sFat = removeNan(tt, mFat, sFat)
     ttMuscle, mMuscle, sMuscle = removeNan(tt, mMuscle, sMuscle)
+    ttMusPer, mMusPer, sMusPer = removeNan(tt, mMusPer, sMusPer)
 
     fig, lbs = plt.subplots(figsize=[16, 12])
     fig.subplots_adjust(right=0.75)
@@ -140,6 +152,8 @@ def bodyMeasurements(credentials):
     we, = lbs.plot(tt, mWeight, "m-", lw=1.5, marker='*', label="Weight")
     fa, = perc.plot(ttFat, mFat, "y-", lw=1.5, marker='D', label="Fat %")
     wa, = perc.plot(ttWater, mWater, "b-", lw=1.5, marker='o', label="Water %")
+    mp, = perc.plot(ttMusPer, mMusPer,  color='brown', lw=1.5, marker='v',
+                    label="Muscle weight %")
     mu, = lbs.plot(ttMuscle, mMuscle, "r-", lw=1.5, marker='s',
                    label="Muscle Mass")
 
@@ -148,7 +162,9 @@ def bodyMeasurements(credentials):
     perc.fill_between(ttFat, mFat - sFat, mFat + sFat, color='y', alpha=0.2)
     perc.fill_between(ttWater, mWater - sWater, mWater + sWater, color='b',
                       alpha=0.2)
-    lbs.fill_between(ttMuscle, mMuscle - sMuscle, mMuscle + sMuscle, color='r',
+    perc.fill_between(ttMusPer, mMusPer - sMusPer, mMusPer + sMusPer,
+                      color='brown', alpha=0.2)
+    lbs.fill_between(ttMusPer, mMuscle - sMuscle, mMuscle + sMuscle, color='r',
                      alpha=0.2)
 
     lbs.grid(which='both')
@@ -183,25 +199,28 @@ def bodyMeasurements(credentials):
                                  bbox_transform=lbs.transAxes, borderpad=0.)
     lbs.add_artist(lbs_ybox)
 
-    ybox1 = TextArea("Water",
+    ybox1 = TextArea("Muscle",
+                     textprops=dict(color="brown", size=15, rotation=90,
+                                    ha='left', va='bottom'))
+    ybox2 = TextArea("and ",
+                     textprops=dict(color="k", size=15, rotation=90,
+                                    ha='left', va='bottom'))
+    ybox3 = TextArea("Water, ",
                      textprops=dict(color="b", size=15, rotation=90,
                                     ha='left', va='bottom'))
-    ybox2 = TextArea(" and ",
-                     textprops=dict(color="k", size=15, rotation=90,
-                                    ha='left', va='bottom'))
-    ybox3 = TextArea("Fat",
+    ybox4 = TextArea("Fat, ",
                      textprops=dict(color="y", size=15, rotation=90,
                                     ha='left', va='bottom'))
-    ybox4 = TextArea(" [",
+    ybox5 = TextArea(" [",
                      textprops=dict(color="k", size=15, rotation=90,
                                     ha='left', va='bottom'))
-    ybox5 = TextArea("%",
+    ybox6 = TextArea("%",
                      textprops=dict(color="orange", size=15, rotation=90,
                                     ha='left', va='bottom'))
-    ybox6 = TextArea("]",
+    ybox7 = TextArea("]",
                      textprops=dict(color="k", size=15, rotation=90,
                                     ha='left', va='bottom'))
-    ybox = VPacker(children=[ybox6, ybox5, ybox4, ybox1, ybox2, ybox3],
+    ybox = VPacker(children=[ybox7, ybox6, ybox5, ybox1, ybox2, ybox3, ybox4],
                    align="bottom", pad=0, sep=5)
     perc_ybox = AnchoredOffsetbox(loc=8, child=ybox, pad=0., frameon=False,
                                   bbox_to_anchor=(1.08, 0.4),
