@@ -5,17 +5,41 @@ import copy
 from datetime import timedelta, datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import matplotlib.pyplot as plt  # For plotting
+# For saving figures to single pdf
+from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.dates as mdates
 from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, VPacker
 # *****************************************************************************
 # Setting RC Parameters for figure size and fontsizes
 import matplotlib.pylab as pylab
-params = {'legend.fontsize': 'xx-large',
-          'figure.figsize': (20, 10),
-          'axes.labelsize': 'xx-large',
-          'axes.titlesize': 'xx-large',
-          'xtick.labelsize': 'xx-large',
-          'ytick.labelsize': 'xx-large'}
+params = {'figure.figsize': (16, 12),
+          'xtick.labelsize': 'medium',
+          'ytick.labelsize': 'medium',
+          'text.usetex': False,
+          'lines.linewidth': 4,
+          'font.family': 'serif',
+          'font.serif': 'Georgia',
+          'font.size': 20,
+          'xtick.direction': 'in',
+          'ytick.direction': 'in',
+          'axes.labelsize': 'x-large',
+          'axes.titlesize': 'x-large',
+          'axes.grid.axis': 'both',
+          'axes.grid.which': 'both',
+          'axes.grid': True,
+          'grid.color': 'xkcd:cement',
+          'grid.alpha': 0.3,
+          'lines.markersize': 6,
+          'legend.borderpad': 0.2,
+          'legend.fancybox': True,
+          'legend.fontsize': 'medium',
+          'legend.framealpha': 0.8,
+          'legend.handletextpad': 0.5,
+          'legend.labelspacing': 0.33,
+          'legend.loc': 'best',
+          'savefig.dpi': 140,
+          'savefig.bbox': 'tight',
+          'pdf.compression': 9}
 pylab.rcParams.update(params)
 
 scope = ['https://spreadsheets.google.com/feeds',
@@ -169,68 +193,126 @@ def bodyMeasurements(credentials):
 
     lbs.grid(which='both')
     lbs.grid(axis='y', color='c')
+    lbs.grid(axis='x', color='k')
     perc.grid(which='both')
     perc.grid(axis='y', color='orange')
 
     lbs.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
 
     ybox1 = TextArea("Muscle",
-                     textprops=dict(color="r", size=15, rotation=90,
+                     textprops=dict(color="r", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox2 = TextArea(" and ",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox3 = TextArea("Weight",
-                     textprops=dict(color="m", size=15, rotation=90,
+                     textprops=dict(color="m", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox4 = TextArea(" [",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox5 = TextArea("lbs",
-                     textprops=dict(color="c", size=15, rotation=90,
+                     textprops=dict(color="c", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox6 = TextArea("]",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox = VPacker(children=[ybox6, ybox5, ybox4, ybox1, ybox2, ybox3],
                    align="bottom", pad=0, sep=5)
     lbs_ybox = AnchoredOffsetbox(loc=8, child=ybox, pad=0., frameon=False,
-                                 bbox_to_anchor=(-0.08, 0.4),
+                                 bbox_to_anchor=(-0.08, 0.3),
                                  bbox_transform=lbs.transAxes, borderpad=0.)
     lbs.add_artist(lbs_ybox)
 
     ybox1 = TextArea("Muscle",
-                     textprops=dict(color="brown", size=15, rotation=90,
+                     textprops=dict(color="brown", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox2 = TextArea("and ",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox3 = TextArea("Water, ",
-                     textprops=dict(color="b", size=15, rotation=90,
+                     textprops=dict(color="b", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox4 = TextArea("Fat, ",
-                     textprops=dict(color="y", size=15, rotation=90,
+                     textprops=dict(color="y", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox5 = TextArea(" [",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox6 = TextArea("%",
-                     textprops=dict(color="orange", size=15, rotation=90,
+                     textprops=dict(color="orange", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox7 = TextArea("]",
-                     textprops=dict(color="k", size=15, rotation=90,
+                     textprops=dict(color="k", size=24, rotation=90,
                                     ha='left', va='bottom'))
     ybox = VPacker(children=[ybox7, ybox6, ybox5, ybox1, ybox2, ybox3, ybox4],
                    align="bottom", pad=0, sep=5)
     perc_ybox = AnchoredOffsetbox(loc=8, child=ybox, pad=0., frameon=False,
-                                  bbox_to_anchor=(1.08, 0.4),
+                                  bbox_to_anchor=(1.08, 0.3),
                                   bbox_transform=lbs.transAxes, borderpad=0.)
     perc.add_artist(perc_ybox)
 
-    lbs.set_title('Body Measurements', fontsize=20)
+    lbs.set_title('Body Measurements')
 
     fig.autofmt_xdate()
-    fig.savefig('BodyMeasurementsTimeSeries.pdf', bbox_inches='tight')
+
+    figList = [fig]
+
+    fig, ax = plt.subplots(figsize=[16, 12])
+    ax.plot(tt, mWeight, "m-", lw=1.5, marker='*', label="Weight")
+    ax.fill_between(tt, mWeight - sWeight, mWeight + sWeight, color='m',
+                     alpha=0.2)
+    ax.set_ylabel('Weight [lbs]')
+    ax.set_title('Body Weight')
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
+    fig.autofmt_xdate()
+    figList += [fig]
+
+    fig, ax = plt.subplots(figsize=[16, 12])
+    ax.plot(ttFat, mFat, "y-", lw=1.5, marker='*', label="Fat")
+    ax.fill_between(ttFat, mFat - sFat, mFat + sFat, color='y',
+                    alpha=0.2)
+    ax.set_ylabel('Fat Percentage [%]')
+    ax.set_title('Body Fat Percentage')
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
+    fig.autofmt_xdate()
+    figList += [fig]
+
+    fig, ax = plt.subplots(figsize=[16, 12])
+    ax.plot(ttWater, mWater, "b-", lw=1.5, marker='*', label="Water")
+    ax.fill_between(ttWater, mWater - sWater, mWater + sWater, color='b',
+                    alpha=0.2)
+    ax.set_ylabel('Water Percentage [%]')
+    ax.set_title('Body Water Percentage')
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
+    fig.autofmt_xdate()
+    figList += [fig]
+
+    fig, ax = plt.subplots(figsize=[16, 12])
+    ax.plot(ttMusPer, mMusPer, color='brown', lw=1.5, marker='*',
+            label="MusPer")
+    ax.fill_between(ttMusPer, mMusPer - sMusPer, mMusPer + sMusPer,
+                    color='brown', alpha=0.2)
+    ax.set_ylabel('Muscle Mass Percentage [%]')
+    ax.set_title('Body Muscle Mass Percentage')
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
+    fig.autofmt_xdate()
+    figList += [fig]
+
+    fig, ax = plt.subplots(figsize=[16, 12])
+    ax.plot(ttMuscle, mMuscle, "r-", lw=1.5, marker='*', label="Muscle")
+    ax.fill_between(ttMuscle, mMuscle - sMuscle, mMuscle + sMuscle, color='r',
+                     alpha=0.2)
+    ax.set_ylabel('Muscle Mass [lbs]')
+    ax.set_title('Body Muscle Mass')
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
+    fig.autofmt_xdate()
+    figList += [fig]
+
+    pp = PdfPages('BodyMeasurementsTimeSeries.pdf')
+    for f in figList:
+        pp.savefig(f, bbox_inches='tight')
+    pp.close()
 
 
 if __name__ == "__main__":
