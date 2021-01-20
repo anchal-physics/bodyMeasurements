@@ -134,6 +134,10 @@ def bodyMeasurements(credentials):
     sFat = np.zeros(noWeeks)
     sMuscle = np.zeros(noWeeks)
     sMusPer = np.zeros(noWeeks)
+    nomStdWater = []
+    nomStdFat = []
+    nomStdMuscle = []
+    nomStdMusPer = []
     for ii in range(len(weekList)-1):
         mWeight[ii] = np.nanmean(weight[weekList[ii]:weekList[ii+1]])
         mWater[ii] = np.nanmean(water[weekList[ii]:weekList[ii+1]])
@@ -141,15 +145,40 @@ def bodyMeasurements(credentials):
         mMuscle[ii] = np.nanmean(muscle[weekList[ii]:weekList[ii+1]])
         mMusPer[ii] = np.nanmean(musPer[weekList[ii]:weekList[ii+1]])
         sWeight[ii] = np.nanstd(weight[weekList[ii]:weekList[ii+1]])
-        sWater[ii] = np.nanmax([np.nanstd(water[weekList[ii]:weekList[ii+1]]),
-                                1])
-        sFat[ii] = np.nanmax([np.nanstd(fat[weekList[ii]:weekList[ii+1]]), 1])
-        sMuscle[ii] = np.nanmax([
-                            np.nanstd(muscle[weekList[ii]:weekList[ii+1]]), 1])
-        sMusPer[ii] = np.nanmax([
-                            np.nanstd(musPer[weekList[ii]:weekList[ii+1]]), 1])
+        if np.count_nonzero(~np.isnan(water[weekList[ii]:weekList[ii+1]])) > 3:
+            nomStdWater += [np.nanstd(water[weekList[ii]:weekList[ii+1]])]
+        if np.count_nonzero(~np.isnan(fat[weekList[ii]:weekList[ii+1]])) > 3:
+            nomStdFat += [np.nanstd(fat[weekList[ii]:weekList[ii+1]])]
+        if np.count_nonzero(~np.isnan(
+                                    muscle[weekList[ii]:weekList[ii+1]])) > 3:
+            nomStdMuscle += [np.nanstd(muscle[weekList[ii]:weekList[ii+1]])]
+        if np.count_nonzero(~np.isnan(
+                                    musPer[weekList[ii]:weekList[ii+1]])) > 3:
+            nomStdMusPer += [np.nanstd(musPer[weekList[ii]:weekList[ii+1]])]
 
-
+    nomStdWater = np.mean(np.array(nomStdWater))
+    nomStdFat = np.mean(np.array(nomStdFat))
+    nomStdMuscle = np.mean(np.array(nomStdMuscle))
+    nomStdMusPer = np.mean(np.array(nomStdMusPer))
+    for ii in range(len(weekList)-1):
+        if np.count_nonzero(~np.isnan(water[weekList[ii]:weekList[ii+1]])) < 4:
+            sWater[ii] = nomStdWater
+        else:
+            sWater[ii] = np.nanstd(water[weekList[ii]:weekList[ii+1]])
+        if np.count_nonzero(~np.isnan(fat[weekList[ii]:weekList[ii+1]])) < 4:
+            sFat[ii] = nomStdFat
+        else:
+            sFat[ii] = np.nanstd(fat[weekList[ii]:weekList[ii+1]])
+        if np.count_nonzero(~np.isnan(
+                                    muscle[weekList[ii]:weekList[ii+1]])) < 4:
+            sMuscle[ii] = nomStdMuscle
+        else:
+            sMuscle[ii] = np.nanstd(muscle[weekList[ii]:weekList[ii+1]])
+        if np.count_nonzero(~np.isnan(
+                                    musPer[weekList[ii]:weekList[ii+1]])) < 4:
+            sMusPer[ii] = nomStdMusPer
+        else:
+            sMusPer[ii] = np.nanstd(musPer[weekList[ii]:weekList[ii+1]])
 
     mWeight[-1] = np.nanmean(weight[weekList[-1]:])
     mWater[-1] = np.nanmean(water[weekList[-1]:])
@@ -261,7 +290,7 @@ def bodyMeasurements(credentials):
     fig, ax = plt.subplots(figsize=[16, 12])
     ax.plot(tt, mWeight, "m-", lw=1.5, marker='*', label="Weight")
     ax.fill_between(tt, mWeight - sWeight, mWeight + sWeight, color='m',
-                     alpha=0.2)
+                    alpha=0.2)
     ax.set_ylabel('Weight [lbs]')
     ax.set_title('Body Weight')
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
@@ -302,7 +331,7 @@ def bodyMeasurements(credentials):
     fig, ax = plt.subplots(figsize=[16, 12])
     ax.plot(ttMuscle, mMuscle, "r-", lw=1.5, marker='*', label="Muscle")
     ax.fill_between(ttMuscle, mMuscle - sMuscle, mMuscle + sMuscle, color='r',
-                     alpha=0.2)
+                    alpha=0.2)
     ax.set_ylabel('Muscle Mass [lbs]')
     ax.set_title('Body Muscle Mass')
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %y'))
