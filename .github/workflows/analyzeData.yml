@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Get oauth file
-        run: openssl enc -nosalt -aes-256-cbc -d -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -base64 -K $ENCKEY -iv $INIT_VECT
+        run: ./decryptJSON.sh
         env:
           ENCKEY: ${{ secrets.ENCKEY }}
           INIT_VECT: ${{ secrets.INIT_VECT }}
