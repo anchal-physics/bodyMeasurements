@@ -14,8 +14,8 @@ jobs:
       - name: Get oauth file
         run: openssl enc -nosalt -aes-256-cbc -d -base64 -K "$ENCKEY" -iv "$INIT_VECT" -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
         env:
-          ENCKEY: {{ secrets.ENCKEY }}
-          INIT_VECT: {{ secrets.INIT_VECT }}
+          ENCKEY: ${{ secrets.ENCKEY }}
+          INIT_VECT: ${{ secrets.INIT_VECT }}
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
