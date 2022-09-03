@@ -15,6 +15,8 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
+          KEY: {{ secrets.KEY }}
+          INIT_VECT: {{ secrets.INIT_VECT }}
       - run: pip install -r requirements.txt
-      - run: openssl enc -nosalt -aes-256-cbc -d -base64 -K $KEY -iv $INIT_VECT -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
+      - run: openssl enc -nosalt -aes-256-cbc -d -base64 -K "$KEY" -iv "$INIT_VECT" -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
       - run: python bodyMeasurements.py
