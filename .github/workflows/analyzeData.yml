@@ -1,0 +1,19 @@
+name: Analyze Data
+on:
+  schedule:
+    - cron: '30 0 * * *'
+  push:
+    branches:
+      - master
+jobs:
+  Analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      with:
+        python-version: '3.6.4'
+        cache: 'pip'
+      - run: pip install -r requirements.txt
+      - run: openssl aes-256-cbc -K $encrypted_65bde58e4bc5_key -iv $encrypted_65bde58e4bc5_iv -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
+      - run: python bodyMeasurements.py
