@@ -1,7 +1,7 @@
 name: Analyze Data
 on:
   schedule:
-    - cron: '30 0 * * *'
+    - cron: '30 11 * * *'
   push:
     branches:
       - master
@@ -20,3 +20,9 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
       - run: python bodyMeasurements.py
+      - name: 'Upload body measurements plot'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Body Measurements Time Series
+          path: BodyMeasurementsTimeSeries.pdf
+          retention-days: 2
