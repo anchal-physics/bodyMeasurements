@@ -338,9 +338,11 @@ def bodyMeasurements(credentials):
     fig.autofmt_xdate()
     figList += [fig]
 
-    pp = PdfPages('BodyMeasurementsTimeSeries.pdf')
-    for f in figList:
+    pp = PdfPages('./public/BodyMeasurementsTimeSeries.pdf')
+    for ii, f in enumerate(figList):
         pp.savefig(f, bbox_inches='tight')
+        f.savefig('./public/BodyMeasurementsTimeSeries_pg' + str(ii) + '.svg',
+                  bbox_inches='tight')
     pp.close()
 
 
