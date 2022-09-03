@@ -1,3 +1,3 @@
 #!/bin/sh
 
-openssl enc -nosalt -aes-256-cbc -d -md sha256 -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -base64 -K "$ENCKEY" -iv "$INIT_VECT"
+openssl enc -aes-256-cbc -pass "$PASSPHRASE" -d -A -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -iter 10000
