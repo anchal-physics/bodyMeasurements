@@ -8,6 +8,7 @@ on:
 jobs:
   Analyze:
     runs-on: ubuntu-latest
+    environment: AnalyzeData
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -15,5 +16,5 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
       - run: pip install -r requirements.txt
-      - run: openssl aes-256-cbc -K $encrypted_65bde58e4bc5_key -iv $encrypted_65bde58e4bc5_iv -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
+      - run: openssl enc -nosalt -aes-256-cbc -d -base64 -K $KEY -iv $INIT_VECT -in bodymeasurements-d291f81a84a8.json.enc -out bodymeasurements-d291f81a84a8.json -d
       - run: python bodyMeasurements.py
