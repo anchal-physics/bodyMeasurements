@@ -68,7 +68,7 @@ def grabInputArgs():
 
 def parse(data, ii, ind):
     if data[ii][ind] == '':
-        return np.NaN
+        return np.nan
     else:
         return float(data[ii][ind])
 
