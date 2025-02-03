@@ -21,7 +21,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python bodyMeasurements.py
       - name: 'Upload body measurements plot'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Body Measurements Time Series
           path: ./public/BodyMeasurementsTimeSeries.pdf
